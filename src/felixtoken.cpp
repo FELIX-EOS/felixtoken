@@ -77,7 +77,8 @@ void token::retire( const asset &quantity, const string &memo )
 	check( quantity.amount > 0, "must retire positive quantity" );
 
 	check( quantity.symbol == st.supply.symbol, "symbol precision mismatch" );
-
+	check( st.supply.amount >= quantity.amount, "quantity exceeds available supply" );
+	
 	statstable.modify( st, same_payer, [&]( auto &s ) { s.supply -= quantity; } );
 
 	sub_balance( st.issuer, quantity );
